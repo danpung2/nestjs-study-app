@@ -7,3 +7,4 @@
 - 앱 생성
 - board 모델 정의
 - 게시판 CRUD
+- 게시판 ValidationPipe

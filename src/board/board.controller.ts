@@ -1,14 +1,15 @@
-import { Body, Controller, Delete, Get, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, Param, Post, Put, UsePipes, ValidationPipe } from "@nestjs/common";
 import { BoardService } from "./board.service";
 import { Board } from "./board.model";
 import { CreateBoardDto } from "./dto/create-board.dto";
-import { UpdateStatusDto } from "./dto/update-status.dto";
+import { UpdateBoardDto } from "./dto/update-board.dto";
 
 @Controller("board")
 export class BoardController {
   constructor(private boardService: BoardService) {}
 
   @Post()
+  @UsePipes(ValidationPipe)
   createBoard(@Body() createBoardDto: CreateBoardDto): Board {
     return this.boardService.createBoard(createBoardDto);
   }
@@ -24,7 +25,8 @@ export class BoardController {
   }
 
   @Put()
-  updateBoardStatus(@Body() updateStatusDto: UpdateStatusDto): Board{
+  @UsePipes(ValidationPipe)
+  updateBoardStatus(@Body() updateStatusDto: UpdateBoardDto): Board{
     return this.boardService.updateBoardStatus(updateStatusDto);
   }
 

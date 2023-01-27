@@ -2,7 +2,7 @@ import { Injectable } from "@nestjs/common";
 import { Board } from "./board.model";
 import { CreateBoardDto } from "./dto/create-board.dto";
 import { v1 as uuid } from "uuid";
-import { UpdateStatusDto } from "./dto/update-status.dto";
+import { UpdateBoardDto } from "./dto/update-board.dto";
 
 @Injectable()
 export class BoardService {
@@ -29,7 +29,7 @@ export class BoardService {
     return this.boardList.find((board) => board.id === id)
   }
 
-  updateBoardStatus(updateStatusDto: UpdateStatusDto): Board{
+  updateBoardStatus(updateStatusDto: UpdateBoardDto): Board{
     const { id, title, description, isPublic } = updateStatusDto;
     const board = this.getBoardById(id);
     board.title = title;
