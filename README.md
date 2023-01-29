@@ -8,3 +8,8 @@
 - board 모델 정의
 - 게시판 CRUD
 - 게시판 ValidationPipe
+
+### 2023.01.29
+
+- PostgreSQL, TypeORM을 이용한 데이터베이스 연결
+- 데이터베이스를 사용하여 게시판 CRUD
