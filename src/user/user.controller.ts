@@ -4,6 +4,7 @@ import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./user.entity";
 import { LoginDto } from "./dto/login.dto";
 import { AuthGuard } from "@nestjs/passport";
+import { getUser } from "./get-user.decorator";
 
 @Controller('user')
 export class UserController {
@@ -23,8 +24,8 @@ export class UserController {
 
   @Post("/test")
   @UseGuards(AuthGuard())
-  test(@Req() req){
-    console.log('req', req);
+  test(@getUser() user: User){
+    console.log('req', user);
   }
 
 }
