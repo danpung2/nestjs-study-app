@@ -18,3 +18,4 @@
 - 유저별 게시글 불러오기
   - Repository API 방식
   - Query Builder 방식
+- 게시글 삭제 시 유저 확인

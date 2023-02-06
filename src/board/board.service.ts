@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { Injectable, NotFoundException, UnauthorizedException } from "@nestjs/common";
 // import { Board } from "./board.model";
 import { CreateBoardDto } from "./dto/create-board.dto";
 import { v1 as uuid } from "uuid";
@@ -68,12 +68,17 @@ export class BoardService {
     return board;
   }
 
-  async deleteBoardById(id: number): Promise<void> {
-    const result = await this.boardRepository.softDelete(id);
+  async deleteBoardById(id: number, user: User): Promise<void> {
+    const query = this.boardRepository.createQueryBuilder("board");
+    query.where("board.userId = :userId and board.id = :id", { userId: user.id, id: id })
+    const board = await query.getOne();
 
-    if(!result.affected){
-      throw new NotFoundException(`[NO DATA] board id: ${id}`);
+    if(!board){
+      throw new UnauthorizedException();
     }
+
+    this.boardRepository.softDelete(board.id);
+
   }
 
 
