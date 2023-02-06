@@ -31,7 +31,7 @@ export class BoardService {
   }
 
   async getBoardById(id: number): Promise <Board> {
-    const board = await this.boardRepository.findOneBy({ id, deletedAt: null });
+    const board = await this.boardRepository.findOneBy({ id, deletedAt: null, isPublic: true });
 
     if(!board){
       throw new NotFoundException(`[NO DATA] board id: ${id}`);
@@ -41,7 +41,19 @@ export class BoardService {
   }
 
   async getAllBoard(): Promise<Board[]> {
-    return this.boardRepository.findBy({ deletedAt: null });
+    return this.boardRepository.findBy({ deletedAt: null, isPublic: true });
+  }
+
+  async getAllBoardByUser(user: User): Promise<Board[]>{
+    // Repository API
+    // 무한 참조 문제 발생할 것 같음
+    // return this.boardRepository.find({ relations: ["user"], where: { user: { id: user.id }, deletedAt: null} })
+
+    // QueryBuilder
+    const query = this.boardRepository.createQueryBuilder("board");
+    query.where("board.userId = :userId", { userId: user.id })
+    const boards = await query.getMany();
+    return boards;
   }
 
   async updateBoard(id: number, updateBoardDto: UpdateBoardDto): Promise <Board> {

@@ -6,6 +6,8 @@ import { User } from "./user.entity";
 import { PassportModule } from "@nestjs/passport";
 import { JwtModule } from "@nestjs/jwt";
 import { JwtStrategy } from "../config/jwt.strategy";
+import { BoardService } from "../board/board.service";
+import { Board } from "../board/board.entity";
 
 @Module({
   imports: [
@@ -19,10 +21,10 @@ import { JwtStrategy } from "../config/jwt.strategy";
         expiresIn: 60 * 60,
       }
     }),
-    TypeOrmModule.forFeature([User])
+    TypeOrmModule.forFeature([User, Board])
   ],
   controllers: [UserController],
-  providers: [UserService, JwtStrategy],
+  providers: [UserService, JwtStrategy, BoardService],
   exports: [JwtStrategy, PassportModule]
 })
 export class UserModule {}

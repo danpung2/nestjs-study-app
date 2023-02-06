@@ -1,14 +1,19 @@
-import { Body, Controller, Post, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./user.entity";
 import { LoginDto } from "./dto/login.dto";
 import { AuthGuard } from "@nestjs/passport";
 import { GetUser } from "./get-user.decorator";
+import { Board } from "../board/board.entity";
+import { BoardService } from "../board/board.service";
 
 @Controller('user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  constructor(
+    private userService: UserService,
+    private boardService: BoardService
+  ) {}
 
   @Post("/join")
   @UsePipes(ValidationPipe)
@@ -22,10 +27,10 @@ export class UserController {
     return this.userService.login(loginDto);
   }
 
-  @Post("/test")
+  @Get("/board")
   @UseGuards(AuthGuard())
-  test(@GetUser() user: User){
-    console.log('req', user);
+  getAllBoardByUser(@GetUser() user: User): Promise<Board[]>{
+    return this.boardService.getAllBoardByUser(user);
   }
 
 }

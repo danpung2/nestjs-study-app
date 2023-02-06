@@ -15,3 +15,6 @@
 - 유저별 게시글 접근 권한
 - 게시글 삭제 시 soft delete 적용
 - 게시글 - 유저 연관관계
+- 유저별 게시글 불러오기
+  - Repository API 방식
+  - Query Builder 방식
