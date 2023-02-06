@@ -6,7 +6,8 @@ import { DataSource } from "typeorm";
 import { UserModule } from './user/user.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(typeORMConfig), BoardModule, UserModule],
+  imports: [
+    TypeOrmModule.forRoot(typeORMConfig), BoardModule, UserModule],
   controllers: [],
   providers: [],
 })
