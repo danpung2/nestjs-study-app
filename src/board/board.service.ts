@@ -29,7 +29,7 @@ export class BoardService {
   }
 
   async getBoardById(id: number): Promise <Board> {
-    const board = await this.boardRepository.findOneBy({ id });
+    const board = await this.boardRepository.findOneBy({ id, deletedAt: null });
 
     if(!board){
       throw new NotFoundException(`[NO DATA] board id: ${id}`);
@@ -39,7 +39,7 @@ export class BoardService {
   }
 
   async getAllBoard(): Promise<Board[]> {
-    return this.boardRepository.find();
+    return this.boardRepository.findBy({ deletedAt: null });
   }
 
   async updateBoard(updateBoardDto: UpdateBoardDto): Promise <Board> {
@@ -55,7 +55,7 @@ export class BoardService {
   }
 
   async deleteBoardById(id: number): Promise<void> {
-    const result = await this.boardRepository.delete(id);
+    const result = await this.boardRepository.softDelete(id);
 
     if(!result.affected){
       throw new NotFoundException(`[NO DATA] board id: ${id}`);
