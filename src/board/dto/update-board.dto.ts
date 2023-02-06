@@ -3,10 +3,6 @@ import { IsBoolean, IsNotEmpty, IsString, MaxLength, MinLength } from "class-val
 export class UpdateBoardDto {
   @IsNotEmpty()
   @IsString()
-  readonly id: number;
-
-  @IsNotEmpty()
-  @IsString()
   @MinLength(2)
   @MaxLength(30)
   readonly title: string;
