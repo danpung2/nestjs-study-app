@@ -2,7 +2,7 @@ import {
   Body,
   Controller,
   Delete,
-  Get,
+  Get, Logger,
   Param,
   ParseIntPipe,
   Post,
@@ -22,6 +22,7 @@ import { User } from "../user/user.entity";
 @Controller("board")
 @UseGuards(AuthGuard())
 export class BoardController {
+  private logger = new Logger("BoardController");
   constructor(private boardService: BoardService) {}
   /*
   데이터베이스 사용하여 구현
@@ -32,6 +33,11 @@ export class BoardController {
     @Body() createBoardDto: CreateBoardDto,
     @GetUser() user: User,
     ): Promise<Board> {
+    this.logger.verbose(`User ${user.nickname} creating a new board.
+    Title: ${createBoardDto.title}
+    Description: ${createBoardDto.description}
+    isPublic: ${createBoardDto.isPublic}`)
+
     return this.boardService.createBoard(createBoardDto, user);
   }
 
@@ -47,8 +53,13 @@ export class BoardController {
 
   @Put("/:id")
   @UsePipes(ValidationPipe)
-  updateBoard(@Param("id", ParseIntPipe) id: number, @Body() updateBoardDto: UpdateBoardDto): Promise<Board> {
-    return this.boardService.updateBoard(id, updateBoardDto);
+  updateBoard(
+    @Param("id", ParseIntPipe) id: number,
+    @Body() updateBoardDto: UpdateBoardDto,
+    @GetUser() user: User
+  ): Promise<Board> {
+    this.logger.verbose(`User ${user.nickname} trying update Board: ${id}`);
+    return this.boardService.updateBoard(id, updateBoardDto, user);
   }
 
   @Delete("/:id")
@@ -56,6 +67,7 @@ export class BoardController {
     @Param("id", ParseIntPipe) id: number,
     @GetUser() user: User
   ): Promise<void> {
+    this.logger.verbose(`User ${user.nickname} trying delete Board: ${id}`);
     return this.boardService.deleteBoardById(id, user);
   }
 

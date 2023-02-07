@@ -19,3 +19,4 @@
   - Repository API 방식
   - Query Builder 방식
 - 게시글 삭제 시 유저 확인
+- 로그 작성

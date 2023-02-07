@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { Body, Controller, Get, Logger, Post, Req, UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
 import { UserService } from "./user.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { User } from "./user.entity";
@@ -10,6 +10,7 @@ import { BoardService } from "../board/board.service";
 
 @Controller('user')
 export class UserController {
+  private logger = new Logger("UserController");
   constructor(
     private userService: UserService,
     private boardService: BoardService
@@ -30,6 +31,8 @@ export class UserController {
   @Get("/board")
   @UseGuards(AuthGuard())
   getAllBoardByUser(@GetUser() user: User): Promise<Board[]>{
+    this.logger.verbose(`User ${user.nickname} trying to get all boards`);
+
     return this.boardService.getAllBoardByUser(user);
   }
 

@@ -56,8 +56,12 @@ export class BoardService {
     return boards;
   }
 
-  async updateBoard(id: number, updateBoardDto: UpdateBoardDto): Promise <Board> {
+  async updateBoard(id: number, updateBoardDto: UpdateBoardDto, user: User): Promise <Board> {
     const board = await this.getBoardById(id);
+
+    if(board.user.id != user.id){
+      throw new UnauthorizedException();
+    }
 
     board.title = updateBoardDto.title;
     board.description = updateBoardDto.description;
@@ -69,16 +73,14 @@ export class BoardService {
   }
 
   async deleteBoardById(id: number, user: User): Promise<void> {
-    const query = this.boardRepository.createQueryBuilder("board");
-    query.where("board.userId = :userId and board.id = :id", { userId: user.id, id: id })
-    const board = await query.getOne();
+    const board = await this.getBoardById(id);
 
-    if(!board){
+    if(board.user != user){
+
       throw new UnauthorizedException();
     }
 
-    this.boardRepository.softDelete(board.id);
-
+    await this.boardRepository.softDelete(id);
   }
 
 
